@@ -1,0 +1,2 @@
+export const API_URL = process.env.API_URL || 'http://192.168.18.2:3000';
+export const WS_URL = process.env.WS_URL || 'ws://192.168.18.2:3000';

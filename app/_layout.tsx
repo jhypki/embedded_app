@@ -1,39 +1,35 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
+import { DarkTheme, DefaultTheme, ThemeProvider, useTheme } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import { useColorScheme } from 'react-native';
+import { CustomDarkTheme } from '@/styles/CustomDarkTheme';
+import { CustomLightTheme } from '@/styles/CustomLightTheme';
+import { ImageProvider } from '@/contexts/ImageContext';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+    const colorScheme = useColorScheme();
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    const { colors } = useTheme();
 
-  if (!loaded) {
-    return null;
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider value={colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
+            <ImageProvider>
+                <Stack>
+                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                    <Stack.Screen
+                        name="image/[id]"
+                        options={{
+                            title: 'Image',
+                            headerStyle: {
+                                backgroundColor:
+                                    colorScheme === 'dark' ? CustomDarkTheme.colors.card : CustomLightTheme.colors.card
+                            },
+                            headerTintColor:
+                                colorScheme === 'dark' ? CustomDarkTheme.colors.text : CustomLightTheme.colors.text,
+                            headerBackButtonDisplayMode: 'minimal'
+                        }}
+                    />
+                </Stack>
+            </ImageProvider>
+        </ThemeProvider>
+    );
 }
