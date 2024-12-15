@@ -4,10 +4,11 @@ import { useTheme } from '@react-navigation/native';
 type Props = {
     children: React.ReactNode;
     fontSize?: number;
+    style?: object;
 };
 
-export default function ThemedText({ children, fontSize }: Props) {
+export default function ThemedText({ children, fontSize, style }: Props) {
     const { colors } = useTheme();
 
-    return <Text style={{ color: colors.text, fontSize: fontSize }}>{children}</Text>;
+    return <Text style={{ color: colors.text, fontSize: fontSize, ...style }}>{children}</Text>;
 }

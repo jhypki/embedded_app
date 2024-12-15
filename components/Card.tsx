@@ -4,11 +4,12 @@ import { useTheme } from '@react-navigation/native';
 
 type Props = {
     children: React.ReactNode;
-    title: string;
+    title?: string;
     padding?: number;
+    style?: object;
 };
 
-const Card = ({ children, title, padding = 16 }: Props) => {
+const Card = ({ children, title, padding = 16, style }: Props) => {
     const { colors } = useTheme();
 
     return (
@@ -18,11 +19,12 @@ const Card = ({ children, title, padding = 16 }: Props) => {
                 {
                     padding: padding,
                     borderColor: colors.border,
-                    backgroundColor: colors.card
+                    backgroundColor: colors.card,
+                    ...style
                 }
             ]}
         >
-            <ThemedText fontSize={16}>{title}</ThemedText>
+            {title && <ThemedText fontSize={16}>{title}</ThemedText>}
             {children}
         </View>
     );
