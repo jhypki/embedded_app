@@ -1,24 +1,31 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { ImageData } from '@/types/ImageData';
-import { API_URL } from '@/config/env';
+import { IMG_URL } from '@/config/env';
 import { useTheme } from '@react-navigation/native';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { memo } from 'react';
 
 type Props = {
     image: ImageData;
+    style?: object;
 };
 
-const Picture = ({ image }: Props) => {
+const Picture = ({ image, style }: Props) => {
     const { colors } = useTheme();
+    const router = useRouter();
 
     return (
-        <Link href={`/image/${image.id}`} style={[styles.container, { borderColor: colors.border, borderWidth: 1 }]}>
-            <Image source={{ uri: `${API_URL}/uploads/${image.filename}` }} style={styles.image} />
-        </Link>
+        <TouchableOpacity
+            onPress={() => router.push(`/image/${image.id}`)}
+            style={[styles.container, { borderColor: colors.border, borderWidth: 1 }, { ...style }]}
+            activeOpacity={0.4}
+        >
+            <Image source={{ uri: `${IMG_URL}/${image.filename}` }} style={styles.image} />
+        </TouchableOpacity>
     );
 };
 
-export default Picture;
+export default memo(Picture);
 
 const styles = StyleSheet.create({
     container: {
@@ -26,7 +33,8 @@ const styles = StyleSheet.create({
         margin: 5,
         flex: 1,
         aspectRatio: 1,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative' // Needed for zIndex
     },
     image: {
         width: '100%',

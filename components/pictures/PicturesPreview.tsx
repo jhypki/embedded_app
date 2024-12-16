@@ -1,37 +1,18 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useEffect, useState } from 'react';
-import { FetchImages } from '@/api/FetchImages';
 import { ImageData } from '@/types/ImageData';
 import Picture from './Picture';
-import socket from '@/config/socket';
-import { SocketEvents } from '@/constants/socketEvents';
 import { useImages } from '@/contexts/ImageContext';
 
 const PicturesPreview = () => {
-    const { images, setImages } = useImages();
+    const { images } = useImages();
 
-    useEffect(() => {
-        const fetchImages = async () => {
-            const images = await FetchImages(3);
-            setImages(images);
-        };
-        fetchImages();
-
-        socket.on('image-upload', (image) => {
-            console.log('Image uploaded:', image);
-            setImages((prevImages) => {
-                if (prevImages && prevImages.length > 0) {
-                    return [image, prevImages[0], prevImages[1]].slice(0, 3);
-                } else {
-                    return [image];
-                }
-            });
-        });
-
-        return () => {
-            socket.off(SocketEvents.IMAGE_UPLOAD);
-        };
-    }, []);
+    if (!images) {
+        return (
+            <View>
+                <Text>Loading...</Text>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>

@@ -1,11 +1,11 @@
 import apiClient from '@/config/axios';
-import { IMAGES_URL } from '@/config/env';
-import { ImageData } from '@/types/ImageData';
 import axios from 'axios';
+import { ActivationCount } from '@/types/ActivationCount';
+import { ACTIVATIONS_URL } from '@/config/env';
 
-export const FetchImageById = async (id: number): Promise<ImageData> => {
+export const FetchActivationCount = async (): Promise<ActivationCount> => {
     try {
-        const response = await apiClient.get(`${IMAGES_URL}/${id}`);
+        const response = await apiClient.get(`${ACTIVATIONS_URL}/count`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -14,6 +14,6 @@ export const FetchImageById = async (id: number): Promise<ImageData> => {
         } else {
             console.error('Unexpected Error:', error);
         }
-        return {} as ImageData;
+        return {} as ActivationCount;
     }
 };

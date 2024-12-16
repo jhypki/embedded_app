@@ -19,12 +19,14 @@ export default function TabLayout() {
                     fontWeight: 'normal'
                 },
                 headerTintColor: 'white',
-                tabBarStyle: Platform.select({
-                    ios: {
-                        position: 'absolute'
-                    },
-                    default: {}
-                }),
+                tabBarStyle: [
+                    Platform.select({
+                        ios: {
+                            position: 'fixed'
+                        },
+                        default: {}
+                    })
+                ],
                 animation: 'shift'
             }}
         >
@@ -52,10 +54,3 @@ export default function TabLayout() {
         </Tabs>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16
-    }
-});

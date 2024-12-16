@@ -7,9 +7,10 @@ type Props = {
     title?: string;
     padding?: number;
     style?: object;
+    animated?: boolean;
 };
 
-const Card = ({ children, title, padding = 16, style }: Props) => {
+const Card = ({ children, title, padding = 16, style, animated = false }: Props) => {
     const { colors } = useTheme();
 
     return (

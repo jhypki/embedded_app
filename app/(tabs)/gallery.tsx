@@ -1,9 +1,10 @@
-import { View, Text } from "react-native";
+import { View, Text } from 'react-native';
+import GalleryList from '@/components/pictures/Gallery';
 
 export default function Gallery() {
-  return (
-    <View>
-      <Text>Gallery</Text>
-    </View>
-  );
+    return (
+        <View>
+            <GalleryList />
+        </View>
+    );
 }
