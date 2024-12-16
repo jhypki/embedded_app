@@ -10,5 +10,5 @@ type Props = {
 export default function ThemedText({ children, fontSize, style }: Props) {
     const { colors } = useTheme();
 
-    return <Text style={{ color: colors.text, fontSize: fontSize, ...style }}>{children}</Text>;
+    return <Text style={[{ color: colors.text, fontSize: fontSize }, style]}>{children}</Text>;
 }

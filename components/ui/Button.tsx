@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { useTheme } from '@react-navigation/native';
 import ThemedText from './ThemedText';
@@ -9,9 +9,11 @@ type Props = {
     backgroundColor?: string;
     fontSize?: number;
     padding?: number;
+    style?: object;
+    onPress?: () => void;
 };
 
-const Button = ({ children, backgroundColor, fontSize = 16, padding = 16 }: Props) => {
+const Button = ({ children, backgroundColor, fontSize = 16, padding = 16, style, onPress }: Props) => {
     const { colors } = useTheme();
     const opacity = useSharedValue(1);
 
@@ -24,18 +26,19 @@ const Button = ({ children, backgroundColor, fontSize = 16, padding = 16 }: Prop
     };
 
     return (
-        <Animated.View
-            onTouchStart={handlePress}
-            onTouchEnd={handleRelease}
+        <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPress}
             style={[
                 styles.container,
-                { backgroundColor: backgroundColor || colors.primary, padding: padding, opacity: opacity }
+                { backgroundColor: backgroundColor || colors.primary, padding: padding, opacity: opacity },
+                style
             ]}
         >
             <ThemedText fontSize={fontSize} style={{ fontWeight: 'bold', color: '#fff' }}>
                 {children}
             </ThemedText>
-        </Animated.View>
+        </TouchableOpacity>
     );
 };
 
