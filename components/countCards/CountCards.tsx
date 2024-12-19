@@ -9,8 +9,8 @@ const CountCards = () => {
 
     return (
         <View style={styles.container}>
-            <CountCard title={'Activated today'} count={activationCount.count.daily} />
-            <CountCard title={'Activated this week'} count={activationCount.count.weekly} />
+            <CountCard title={'Activated today'} count={activationCount?.count?.daily} />
+            <CountCard title={'Activated this week'} count={activationCount?.count?.weekly} />
         </View>
     );
 };

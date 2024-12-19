@@ -1,6 +1,5 @@
 import { StyleSheet, Dimensions, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { LineChart } from 'react-native-chart-kit';
 import Card from './Card';
 import { useTheme } from '@react-navigation/native';
 import { ActivationData } from '@/types/ActivationData';
@@ -60,8 +59,8 @@ const ChartCard = () => {
             <View style={styles.chartWrapper}>
                 <BarChart
                     data={data}
-                    width={screenWidth - 40} // Strictly limit the chart width
-                    height={200} // Set a fixed height
+                    width={screenWidth - 40}
+                    height={200}
                     showVerticalLines={false}
                     showLine={false}
                     color={colors.text}
