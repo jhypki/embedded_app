@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { ImageData } from '@/types/ImageData';
-import { IMG_URL } from '@/config/env';
+import { API_KEY, IMG_URL } from '@/config/env';
 import { useTheme } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { memo } from 'react';
@@ -16,11 +16,19 @@ const Picture = ({ image, style }: Props) => {
 
     return (
         <TouchableOpacity
-            onPress={() => router.push(`/image/${image.id}`)}
+            onPress={() => router.push(`/image/${image.id}?apiKey=${API_KEY}`)}
             style={[styles.container, { borderColor: colors.border, borderWidth: 1 }, { ...style }]}
             activeOpacity={0.4}
         >
-            <Image source={{ uri: `${IMG_URL}/${image.filename}` }} style={styles.image} />
+            <Image
+                source={{
+                    uri: `${IMG_URL}/${image.filename}`,
+                    headers: {
+                        'x-api-key': API_KEY
+                    }
+                }}
+                style={styles.image}
+            />
         </TouchableOpacity>
     );
 };
