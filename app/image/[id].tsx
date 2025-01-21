@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { API_URL } from '@/config/env';
 import { useImages } from '@/contexts/ImageContext';
 import ThemedText from '@/components/ui/ThemedText';
 import { useTheme } from '@react-navigation/native';
 import { GetLabelForImage } from '@/api/GetLabelForImage';
 import Button from '@/components/ui/Button';
+import { DeleteImageById } from '@/api/DeleteImageById';
 // import RNFS from 'react-native-fs';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -43,23 +44,17 @@ const ImageView = () => {
     //     }
     // };
 
-    const generateLabel = async () => {
-        if (!id) return;
+    const handleDelete = async () => {
+        if (!image) return;
 
-        setGeneratingLabel(true);
         try {
-            const label = await GetLabelForImage(id.toString());
-            setLocalLabel(label);
-
-            if (image) {
-                image.label = label;
-                setImages((prevImages) => prevImages!.map((img) => (img.id === Number(id) ? { ...img, label } : img)));
-            }
+            await DeleteImageById(image.id.toString());
+            setImages((images || []).filter((img) => img.id !== image.id));
         } catch (error) {
-            console.error('Error generating label:', error);
-        } finally {
-            setGeneratingLabel(false);
+            console.error('Delete error:', error);
         }
+
+        router.back();
     };
 
     if (!image) {
@@ -78,12 +73,6 @@ const ImageView = () => {
                     {new Date(image.uploadedAt).toLocaleString()}
                 </ThemedText>
 
-                {generatingLabel ? (
-                    <ActivityIndicator style={styles.activityIndicator} size="large" color={colors.primary} />
-                ) : (
-                    <Button onPress={generateLabel}>Generate label</Button>
-                )}
-
                 <View style={styles.labelContainer}>
                     {image.label || localLabel ? (
                         <Text style={[{ color: colors.primary }, styles.label]}>{image.label || localLabel}</Text>
@@ -92,12 +81,9 @@ const ImageView = () => {
 
                 <View style={styles.bottomContainer}>
                     <View style={styles.icons}>
-                        <TouchableWithoutFeedback style={styles.circularButton}>
-                            <AntDesign name="download" size={24} color={colors.primary} style={{ marginBottom: 20 }} />
-                        </TouchableWithoutFeedback>
-                        <TouchableWithoutFeedback style={styles.circularButton}>
-                            <AntDesign name="sharealt" size={24} color={colors.primary} style={{ marginBottom: 20 }} />
-                        </TouchableWithoutFeedback>
+                        <Button onPress={() => handleDelete()} style={styles.deleteBtn}>
+                            Delete
+                        </Button>
                     </View>
                 </View>
             </View>
@@ -157,5 +143,12 @@ const styles = StyleSheet.create({
     icons: {
         flexDirection: 'row',
         justifyContent: 'space-around'
+    },
+    deleteBtn: {
+        backgroundColor: 'red',
+        color: 'white',
+        padding: 16,
+        borderRadius: 10,
+        marginBottom: 20
     }
 });

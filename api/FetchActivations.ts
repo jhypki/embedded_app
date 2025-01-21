@@ -1,19 +1,7 @@
-import apiClient from '@/config/axios';
-import axios from 'axios';
 import { ActivationData } from '@/types/ActivationData';
 import { ACTIVATIONS_URL } from '@/config/env';
+import { FetchData } from './FetchData';
 
-export const FetchActivations = async (): Promise<ActivationData[]> => {
-    try {
-        const response = await apiClient.get(ACTIVATIONS_URL);
-        return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            console.error('Axios Error:', error.message);
-            console.error('Config:', error.config);
-        } else {
-            console.error('Unexpected Error:', error);
-        }
-        return [];
-    }
+export const FetchActivations = async (count = 0): Promise<ActivationData[]> => {
+    return await FetchData<ActivationData[]>(`${ACTIVATIONS_URL}?count=${count}`);
 };
